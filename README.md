@@ -107,3 +107,11 @@ uv run python -m paws.executor manual_test.aol
 - **extensions/bash.py**: MCP-compliant Bash extension.
 - **planner.py**: Generates AOL using Gemini.
 - **executor.py**: Executes AOL steps via MCP tools.
+
+## License
+
+This project is licensed under the [GNU Affero General Public License v3.0 (AGPL-3.0)](LICENSE).
+
+- **Free Use:** You are free to use, modify, and distribute this software.
+- **Contribution Requirement:** If you modify this software and distribute it (or make it available over a network), you must release your improvements under this same license (open source).
+- **Commercial Use:** Commercial use is allowed, provided you comply with the open-source requirements above. For proprietary (closed-source) commercial use, please contact the maintainers for a separate commercial license.
