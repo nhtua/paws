@@ -141,13 +141,42 @@ def extract_paths_from_inputs(inputs: dict) -> List[str]:
     """
     paths = []
     
+    # Keys that contain commands, not paths
+    command_keys = {"command", "script", "code", "shell", "cmd"}
+    
     def _extract_recursive(value, key=""):
+        # Skip command-like keys - they contain shell commands, not paths to check
+        if key.lower() in command_keys:
+            return
+        
         if isinstance(value, str):
-            # Heuristic: looks like a path if it contains / or \
-            if "/" in value or "\\" in value:
-                # Skip URLs
-                if not value.startswith(("http://", "https://")):
-                    paths.append(value)
+            # Better path detection heuristics:
+            # - Starts with /, ./, ~/, or is a Windows path
+            # - Not a URL
+            # - Not a shell command (contains pipes, redirects, etc.)
+            value_stripped = value.strip()
+            
+            # Skip URLs
+            if value_stripped.startswith(("http://", "https://", "ftp://")):
+                return
+            
+            # Skip things that look like shell commands
+            shell_indicators = ["|", "&&", "||", ";", ">", "<", "`", "$("]
+            if any(ind in value_stripped for ind in shell_indicators):
+                return
+            
+            # Check if it looks like a path
+            is_path = (
+                value_stripped.startswith("/") or
+                value_stripped.startswith("./") or
+                value_stripped.startswith("../") or
+                value_stripped.startswith("~/") or
+                (len(value_stripped) > 2 and value_stripped[1] == ":" and value_stripped[2] == "\\")  # Windows
+            )
+            
+            if is_path:
+                paths.append(value_stripped)
+                
         elif isinstance(value, dict):
             for k, v in value.items():
                 _extract_recursive(v, k)
@@ -157,3 +186,4 @@ def extract_paths_from_inputs(inputs: dict) -> List[str]:
     
     _extract_recursive(inputs)
     return paths
+

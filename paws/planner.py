@@ -2,6 +2,7 @@ import os
 import sys
 import argparse
 import asyncio
+import logging
 from importlib.resources import files
 from typing import List
 from dotenv import load_dotenv
@@ -12,6 +13,14 @@ from paws.core.models import AOLWorkflow, AOLProvider, AOLUserInputs, AOLStep, A
 from paws.core.registry import Registry
 
 load_dotenv()
+
+# Configure logging from environment variable
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+logging.basicConfig(
+    level=getattr(logging, log_level, logging.INFO),
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 
 def _load_aol_specification() -> str:
@@ -63,7 +72,7 @@ class Planner:
         # We rely on the prompt description and JSON mode.
 
         response = self.client.models.generate_content(
-            model="gemini-3.0-flash",
+            model=os.getenv("GEMINI_MODEL_NAME", "gemini-3-pro-preview"),
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=system_prompt,
@@ -75,6 +84,7 @@ class Planner:
              if response.text:
                 import json
                 data = json.loads(response.text)
+                logger.debug(f"Gemini response: {response.text}")
                 return AOLWorkflow(**data)
              else:
                  raise ValueError("Empty response from Gemini")
@@ -95,8 +105,8 @@ def save_aol(aol: AOLWorkflow, path: str):
     yaml.add_representer(str, str_representer)
     
     with open(path, 'w') as f:
-        # Dump pydantic model to dict, then to yaml
-        yaml.dump(aol.model_dump(), f, sort_keys=False, indent=2, default_flow_style=False, allow_unicode=True)
+        # Dump pydantic model to dict, excluding None values for cleaner output
+        yaml.dump(aol.model_dump(exclude_none=True), f, sort_keys=False, indent=2, default_flow_style=False, allow_unicode=True)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PAWS Planner")
