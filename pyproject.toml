@@ -15,3 +15,17 @@ dependencies = [
 dev = [
     "pytest>=9.0.2",
 ]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["paws", "paws.core", "paws.extensions", "paws.aol_spec"]
+
+[tool.setuptools.package-dir]
+"paws.aol_spec" = "docs/designs/AOL"
+
+[tool.setuptools.package-data]
+"paws.aol_spec" = ["AOL Specification.md"]
+

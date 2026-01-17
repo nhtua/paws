@@ -1,14 +1,69 @@
+# AOL v1.0 Example: Loop with Counter and Conditions
+
 provider:
   name: Localhost
-  context: {}
+  context:
+    workspace: ./workspace
+  entitlements:
+    - scope: "Read/Write ./workspace/"
+      capability: "Execute Bash Commands"
+
 user_inputs:
-  prompt: Get today's date
+  prompt: "Test AOL v1.0 features including loops and conditions"
   resources: []
+
 steps:
-- id: step_1
-  description: Execute date command
-  extension: Bash
-  inputs:
-    command: date
-  outputs:
-    stdout: Current date
+  - id: step_1
+    description: "Get current date"
+    extension: Bash
+    inputs:
+      command: "date '+%Y-%m-%d %H:%M:%S'"
+    outputs:
+      stdout: "Current date/time"
+
+  - id: step_2
+    description: "Echo the date from step 1"
+    extension: Bash
+    inputs:
+      command: "echo 'The date from step 1 was: {{step_1.stdout}}'"
+    outputs:
+      stdout: "Echoed date"
+
+  - id: check_condition
+    description: "Check if we should run the optional step"
+    extension: Bash
+    inputs:
+      command: "echo 'yes'"
+    outputs:
+      stdout: "Condition result"
+
+  - id: conditional_step
+    description: "This runs only if check_condition outputs 'yes'"
+    extension: Bash
+    condition:
+      if: '"{{check_condition.stdout}}" == "yes"'
+    inputs:
+      command: "echo 'Conditional step executed!'"
+
+  - id: retry_loop
+    loop_begin:
+      max_iterations: 3
+
+  - id: loop_work
+    description: "Work inside the loop"
+    extension: Bash
+    inputs:
+      command: "echo 'Loop iteration {{retry_loop.counter}}'"
+    outputs:
+      stdout: "Loop output"
+
+  - id: retry_loop_end
+    loop_end:
+      loop_id: retry_loop
+      exit_when: '"{{retry_loop.counter}}" >= "3"'
+
+  - id: final_step
+    description: "Final step after the loop"
+    extension: Bash
+    inputs:
+      command: "echo 'All done! User prompt was: {{user_inputs.prompt}}'"

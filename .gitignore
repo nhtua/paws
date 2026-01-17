@@ -129,3 +129,6 @@ uv.lock
 
 # Agent skills
 .agent/skills/
+
+# Logs
+.paws_logs/
