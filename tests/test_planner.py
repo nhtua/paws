@@ -73,3 +73,69 @@ def test_get_system_prompt_includes_bash(mock_genai_client):
     assert "You are the PAWS Planner" in prompt
     assert "Extension 'Bash'" in prompt
     assert "execute_command" in prompt
+
+
+# Tests for save_aol function
+
+from paws.planner import save_aol
+from paws.core.models import AOLWorkflow, AOLProvider, AOLUserInputs, AOLStep
+import yaml
+
+def test_save_aol_adds_extension(tmp_path):
+    """Test that save_aol adds .aol extension if missing."""
+    workflow = AOLWorkflow(
+        provider=AOLProvider(name="Test"),
+        user_inputs=AOLUserInputs(prompt="test"),
+        steps=[]
+    )
+    
+    # Save without .aol extension
+    path = str(tmp_path / "my_workflow")
+    result_path = save_aol(workflow, path)
+    
+    assert result_path == path + ".aol"
+    assert (tmp_path / "my_workflow.aol").exists()
+
+def test_save_aol_keeps_extension(tmp_path):
+    """Test that save_aol doesn't double-add .aol extension."""
+    workflow = AOLWorkflow(
+        provider=AOLProvider(name="Test"),
+        user_inputs=AOLUserInputs(prompt="test"),
+        steps=[]
+    )
+    
+    # Save with .aol extension already
+    path = str(tmp_path / "my_workflow.aol")
+    result_path = save_aol(workflow, path)
+    
+    assert result_path == path
+    assert (tmp_path / "my_workflow.aol").exists()
+
+def test_save_aol_excludes_none_values(tmp_path):
+    """Test that save_aol excludes None values from output."""
+    workflow = AOLWorkflow(
+        provider=AOLProvider(name="Test"),
+        user_inputs=AOLUserInputs(prompt="test"),
+        steps=[
+            AOLStep(
+                id="s1",
+                description="Test step",
+                extension="Bash",
+                inputs={"command": "echo hi"}
+                # condition, on_failure, timeout, etc. are None by default
+            )
+        ]
+    )
+    
+    path = str(tmp_path / "test.aol")
+    save_aol(workflow, path)
+    
+    # Read the file and check for null values
+    with open(path) as f:
+        content = f.read()
+    
+    # Should not contain "null" for optional fields
+    assert "condition: null" not in content
+    assert "on_failure: null" not in content
+    assert "timeout: null" not in content
+    assert "loop_begin: null" not in content
