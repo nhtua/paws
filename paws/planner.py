@@ -63,7 +63,7 @@ class Planner:
         # We rely on the prompt description and JSON mode.
 
         response = self.client.models.generate_content(
-            model="gemini-2.0-flash-exp",
+            model="gemini-3.0-flash",
             contents=prompt,
             config=types.GenerateContentConfig(
                 system_instruction=system_prompt,
