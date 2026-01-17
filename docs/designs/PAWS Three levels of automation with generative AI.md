@@ -1,42 +1,50 @@
-## Level 1 - Using the tool
+# PAWS: Three Levels of Automation with Generative AI
 
-Users can use tools that work with generative to perform specific tasks. For example:
+## Level 1: Using the Tool
 
-* Using Chat LLM to find information and generate a report  
-* Using Google AI Studio with Nanobanana to generate a poster for a birthday party  
-* Using Veo 3.1 or Kling 2.6 to generate a very short video for 8-15 seconds.
+At this level, users interact directly with generative AI tools to perform specific, isolated tasks.
 
-## Level 2 - Using workflow
+**Examples:**
+* Using a Chat LLM to research information and generate a report.
+* Using Google AI Studio with Nanobanana to generate a poster for a birthday party.
+* Using Veo 3.1 or Kling 2.6 to generate a very short video (8-15 seconds).
 
-User using tools with built-in workflow features: ComfyUI, N8N to complex tasks. This level still requires users to input, interact and feedback back and forth to get the results. Final result is granular, not complete or production-ready. It is more like a shortcut to users process. For examples:
+## Level 2: Using Workflows
 
-* User using N8N workflow to categorize and filter email with the help of LLM models  
-* User using ComfyUI workflow to restore old black and white photos and bring it back to life
+Users leverage tools with built-in workflow features, such as ComfyUI or n8n, to handle more complex tasks. This level still requires significant user input, interaction, and iterative feedback to achieve the desired outcome. The final results are often granular components rather than a complete, production-ready product. Workflows at this level act as process accelerators for the user.
 
-## Level 3 - Autonomous Operator
+**Examples:**
+* A user utilizing an n8n workflow to categorize and filter emails with the assistance of LLM models.
+* A user utilizing a ComfyUI workflow to restore and colorize old black-and-white photos.
 
-Users use the operator and custom workflow for solving big and complex tasks with minimum human interaction. Users give requests and resources, and describe the expected output. Operator understand users request and performs reasoning to make a plan for execution. Plan is a descriptive text in which operator expects to follow and finish the task, so we can also call a plan here a workflow, with the format is more like Autonomous Operator Language, rather than JSON format or Programming coding language. Following the same plan would reproduce similar variants of a request. For example:
+## Level 3: Autonomous Operator
 
-* A User gives prompt "create an illustration book with many colour pages for the story Goldilocks and Three Bears", the operator builds a plan, make multiple request to ComfyUI to run a predefined working workflow, keeps running in the background for 2 hours, and finally generates 23 pages of an Illustration book  
-* A user gives a prompt "generate a video of a vlogger reviewing Google Pixel 13, she talks about the phone following the given script. Here is the script...", The operator took the input of a character photo, generates multi videos by request ComfyUI to run a predefined working workflow to run against prepared input, each video covers a sentence in the script for about 3 seconds. The operator takes the last frame of each video as the input for the next iteration for generating the video of the next sentence. The operator keeps generating a video for each line in the script until they finish the script. At last the operator verifies that the end video meets the condition of completion, so it stops generating and merges all the videos using ffmpeg into 1 big videos which is about 5 minutes long. The entire workflow runs in about 10 hours.
+Users employ an autonomous operator and custom workflows to solve large, complex tasks with minimal human interaction. Users provide the initial request, necessary resources, and a description of the expected output. The operator understands the request and performs reasoning to create an execution plan.
 
-## Why level 3 autonomy?
+This plan is a descriptive text that the operator follows to complete the task. We refer to this plan as a workflow, written in an Autonomous Operator Language (AOL) rather than a rigid JSON format or a low-level programming language. Following the same plan allows for reproducible results or similar variants of a request.
 
-Most of the generative AI model and tools right now as off Jan 16th, 2026 only offers the limited ability to generate small and short-form content like a single photo, a 3-8 second video, a short essay. When it comes to a complete solution that offers a long-form content like an illustrated book, 5 minutes video, or a length novel book, all of the tool get into trouble of generating content while maintaining relevant content, character identity, logical content, etc.  
-We need a solution that . The solution also needs to have the ability to verify the output at each step to keep the next iteration relevant and coherent. The autonomous operator should have requirements bellow:
+**Examples:**
+* **Illustration Book:** A user provides the prompt: "Create an illustration book with many colored pages for the story 'Goldilocks and the Three Bears'." The operator builds a plan, makes multiple requests to ComfyUI to run a predefined workflow, keeps running in the background for 2 hours, and finally generates a 23-page illustration book.
+* **Long-form Video:** A user provides the prompt: "Generate a video of a vlogger reviewing the Google Pixel 13. She talks about the phone following the given script. Here is the script..." The operator takes a photo of the character as input and generates multiple video segments by requesting ComfyUI to run a predefined workflow against prepared inputs. Each video segment covers a sentence in the script (approx. 3 seconds). The operator uses the last frame of each segment as the input for the next iteration to ensure visual continuity. This process repeats until the entire script is covered. Finally, the operator verifies that the content meets the completion conditions and merges all segments using FFmpeg into a single 5-minute video. The entire workflow takes about 10 hours to complete.
 
-1. Can do planning and reasoning. Perform the plan steps by step, including making calls to available 3rd tools and ai agents to perform certain tasks.  
-2. The plan (workflow of the autonomous operator) should use a certain format that ensures it reproduces the same or similar results every time. The format must be defined in a high-level language rather coding language like JSON, Node.js or Java. The workflow itself is descriptive and human-readable, easy to interact, modify, correct and share.  
-3. The Autonomous Operator should have following important components: 
-  * Provider: store pre-authorized credentials in the system. Provider manages the authentication for the extensions.  
-  * Extension: which is an abstract layer to 3rd services and tools, For example: Extension for Google Gemini that processes prompt; Extention for ComfyUI, which interacts with the ComfyUI URL/API endpoint to request execution of a ComfyUI Workflow. etc. Extensiom simplify and delegates the duty of making 3rd tools to work with the Operator onto the 3rd tools author. Here it comes to the Agentic era. Extension must completely compatible with MCP and AI Agents. However, not all extensions are MCP or AI Agents, extension could be just a Bash shell extension, for example, which run command lines in Bash. 
-  * Validator, as an optional part of the extension. Which help to verify the Extension output up to a definition of success/failure  
-  * Workflow planner and executor: planner generates plans in high-level workflow language. Executor follows instruction of the workflow to call extension, wait for processing, and retrieve the output. Executor also need to call Validator to verify the output to decide what to do next. Both Planer and Executor must share the same workflow language.  
-4. The workflow has 3 main sections:  
-  * Section 1: Description of using the provider  
-  * Section 2: User's inputs:  
-    * Prompt that describes the request and what is the expected result  
-    * Initial resource or reference: could be an idea, an essay, a photo, etc.  
-  * Section 3: workflow logic. It describes what to do with input and output. Workflow also support condition switch to make a designed decision on certain condition.  
-  * Workflow is a text file that can be shared between users. Workflow is reproducible.
+## Why Level 3 Autonomy?
+
+As of January 16th, 2026, most generative AI models and tools offer limited ability to generate only small, short-form content (e.g., a single photo, a 3-8 second video, or a short essay). When attempting to create complete solutions producing long-form content—such as an illustrated book, a 5-minute video, or a full-length novel—these tools struggle to maintain context, character identity, and logical coherence over time.
+
+We need a solution that bridges this gap. This solution must be able to verify the output at each step to keep the next iteration relevant and coherent. An Autonomous Operator should meet the following requirements:
+
+1.  **Planning and Reasoning:** It must be able to plan and reason, performing steps sequentially. This includes making calls to third-party tools and AI agents to execute specific tasks.
+2.  **Reproducible Workflows:** The plan (the operator's workflow) should use a format that ensures reproducible results. This format must be defined in a high-level language rather than a coding language like JSON, Node.js, or Java. The workflow itself should be descriptive, human-readable, and easy to interact with, modify, correct, and share.
+3.  **Core Components:** The Autonomous Operator consists of the following key components:
+    *   **Provider:** Stores pre-authorized credentials within the system and manages authentication for extensions.
+    *   **Extension:** An abstraction layer for third-party services and tools. For example, an extension for Google Gemini processes prompts, while an extension for ComfyUI interacts with its API to execute workflows. Extensions simplify the integration of third-party tools, delegating compatibility to the tool's author. While extensions should ideally be compatible with MCP (Model Context Protocol) and AI Agents, they can also be simple implementations, such as a Bash extension for running command-line instructions.
+    *   **Validator (Optional):** A component within an extension that verifies the output against a definition of success or failure.
+    *   **Workflow Planner and Executor:** The **Planner** generates plans in the high-level workflow language. The **Executor** follows the workflow instructions to call extensions, wait for processing, and retrieve output. The Executor also invokes Validators to verify output and decide the next steps. Both Planner and Executor must utilize the same workflow language.
+4.  **Workflow Structure:** The workflow consists of three main sections:
+    *   **Section 1: Provider Description:** Describes the providers being used.
+    *   **Section 2: User Inputs:**
+        *   Prompts describing the request and expected result.
+        *   Initial resources or references (e.g., an idea, an essay, a photo).
+    *   **Section 3: Workflow Logic:** Describes how to process inputs and outputs, including conditional switching to make design decisions based on specific criteria.
+    *   **Characteristics:** The workflow is a text file that acts as a reproducible recipe, easily shared between users.
 
