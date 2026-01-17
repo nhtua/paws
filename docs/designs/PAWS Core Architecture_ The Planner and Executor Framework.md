@@ -1,6 +1,8 @@
 # Technical Specification: PAWS Core Architecture & AOL
 
-**Version:** 1.1**System Context:** Progressive Autonomous Workflow Server (PAWS)**Core Components:** Planner (Compiler), AOL (Bytecode), Executor (Runtime)
+**Version:** 1.1
+**System Context:** Progressive Autonomous Workflow Server (PAWS)
+**Core Components:** Planner (Compiler), AOL (Bytecode), Executor (Runtime)
 
 ## 1. Executive Summary
 
