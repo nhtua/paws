@@ -49,11 +49,15 @@ class BashExtension:
                 timeout=30
             )
             
+            output_text = result.stdout
+            if result.stderr:
+                output_text += f"\n--- stderr ---\n{result.stderr}"
+
             return {
                 "content": [
                     {
                         "type": "text",
-                        "text": result.stdout if result.returncode == 0 else f"Error (Exit Code {result.returncode}):\n{result.stderr}\n{result.stdout}"
+                        "text": output_text if result.returncode == 0 else f"Error (Exit Code {result.returncode}):\n{output_text}"
                     }
                 ],
                 "isError": result.returncode != 0

@@ -13,7 +13,7 @@ The bridge between these phases is the **Autonomous Operator Language (AOL)**, a
 
 ## 🚀 Why PAWS?
 
-Most generative AI tools today only offer the ability to generate small, short-form content — a single photo, an 8-second video, a short essay. When it comes to **long-form content** like illustrated books, 5-minute videos, or lengthy novels, current tools struggle with maintaining relevant content, character identity, and logical coherence.
+Most generative AI tools today only offer the ability to generate small, short-form content — a single photo, an 8-second video, a short essay. When it comes to **long-form content** like illustrated books, 5-minute videos, or lengthy research papers, current tools struggle with maintaining relevant content, character identity, and logical coherence.
 
 PAWS addresses this by providing:
 
