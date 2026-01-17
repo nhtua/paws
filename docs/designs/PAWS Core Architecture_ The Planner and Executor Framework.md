@@ -1,6 +1,3 @@
-Based on the expanded sources, specifically the PAWS Phase 1 technical design, OpenHands architecture, and agentic design principles, I have updated the technical introduction document.  
-This version now explicitly details the architecture of the **Planner** (the "Compiler") and provides a deep dive into the **Executor** (the "Runtime Engine"), explaining how it manages state, isolation, and the "Agent-Computer Interface" without constant LLM dependency.
-
 # Technical Specification: PAWS Core Architecture & AOL
 
 **Version:** 1.1**System Context:** Progressive Autonomous Workflow Server (PAWS)**Core Components:** Planner (Compiler), AOL (Bytecode), Executor (Runtime)
