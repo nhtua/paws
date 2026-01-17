@@ -1,0 +1,14 @@
+provider:
+  name: Localhost
+  context: {}
+user_inputs:
+  prompt: Get today's date
+  resources: []
+steps:
+- id: step_1
+  description: Execute date command
+  extension: Bash
+  inputs:
+    command: date
+  outputs:
+    stdout: Current date
