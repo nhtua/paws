@@ -1,6 +1,3 @@
-Based on the research from "The Architecture of Agency" and "Three Levels of automation with generative AI," here is the updated **Technical Design Document for PAWS Phase 1**.  
-This version specifically integrates the detailed implementation strategy for the **Extension Architecture**, using the ffmpeg video tool as the primary case study to demonstrate how complex binaries are wrapped into MCP-compatible servers.
-
 # Technical Design: PAWS Phase 1 (Core Execution Engine)
 
 ## 1. Executive Summary
