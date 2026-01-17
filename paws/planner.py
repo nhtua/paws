@@ -101,12 +101,18 @@ def str_representer(dumper, data):
     return dumper.represent_scalar('tag:yaml.org,2002:str', data)
 
 def save_aol(aol: AOLWorkflow, path: str):
+    # Ensure .aol extension
+    if not path.endswith(".aol"):
+        path = path + ".aol"
+    
     # Add custom string representer
     yaml.add_representer(str, str_representer)
     
     with open(path, 'w') as f:
         # Dump pydantic model to dict, excluding None values for cleaner output
         yaml.dump(aol.model_dump(exclude_none=True), f, sort_keys=False, indent=2, default_flow_style=False, allow_unicode=True)
+    
+    return path  # Return actual path in case extension was added
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PAWS Planner")
